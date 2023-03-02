@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class StockLot(models.Model):
@@ -14,12 +14,19 @@ class StockLot(models.Model):
             ]
             lot_ids = self.env['stock.quant'].search(domain).mapped('lot_id').ids
             args = [('id', 'in', lot_ids)] + args
+        elif ctx.get('origin') and ctx.get('default_product_id'):
+            domain = [
+                ('order_id.name', '=', ctx['origin']),
+                ('product_id', '=', ctx['default_product_id']),
+            ]
+            lot_ids = self.env['sale.order.line'].search(domain).mapped('lot_id').ids
+            args = [('id', 'in', lot_ids)] + args
 
         return super(StockLot, self).name_search(name, args, operator, limit)
 
     def name_get(self):
         ctx = self.env.context
-        res_olds = super(StockLot, self).name_get()
+        res_old = super(StockLot, self).name_get()
         if ctx.get('product_id'):
             domain = [
                 ('product_id', '=', ctx['product_id']),
@@ -32,12 +39,11 @@ class StockLot(models.Model):
             }
 
             res = []
-
-            for (key, name) in res_olds:
+            for (key, name) in res_old:
                 if key in map_lote:
                     res.append((key, '%s (Disp: %s)' % (name, map_lote[key])))
                 else:
                     res.append((key, name))
             return res
 
-        return res_olds
+        return res_old

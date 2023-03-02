@@ -10,5 +10,6 @@
     'data': [
         # views
         'views/sale_order_views.xml',
+        'views/stock_move_views.xml',
     ],
 }
