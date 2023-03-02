@@ -16,20 +16,6 @@ class SaleOrderLine(models.Model):
         if not self.product_uom_qty or self.product_uom_qty < 0:
             return
 
-        '''
-        if not self.product_id:
-            return {'warning': {
-                'title': 'Cuidado',
-                'message': 'Debe seleccionar un producto'
-            }}
-
-        if not self.lot_id:
-            return {'warning': {
-                'title': 'Cuidado',
-                'message': 'Debe seleccionar un producto Lote/Nº de serie'
-            }}
-        '''
-
         domain = [
             ('product_id', '=', self.product_id.id),
             ('lot_id', '=', self.lot_id.id),
