@@ -1,5 +1,5 @@
 {
-    'name': 'sale_stock',
+    'name': 'stock_lote',
     'version': '1.0',
     'category': 'sale',
     'summary': '',

@@ -2,7 +2,7 @@ from odoo import api, models
 
 
 class StockLot(models.Model):
-    _inherit = 'stock.lot'
+    _inherit = 'stock.production.lot'
 
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
@@ -34,7 +34,7 @@ class StockLot(models.Model):
             ]
             stock_quant_objs = self.env['stock.quant'].search(domain)
             map_lote = {
-                stock_quant.lot_id.id: stock_quant.quantity
+                stock_quant.lot_id.id: stock_quant.available_quantity
                 for stock_quant in stock_quant_objs
             }
 
