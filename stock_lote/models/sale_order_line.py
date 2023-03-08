@@ -5,6 +5,7 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     lot_id = fields.Many2one('stock.production.lot', 'Lote/Nº de serie')
+    product_categ_id = fields.Many2one(related='product_id.categ_id', string='Categoría de producto', readonly=True)
 
     @api.onchange('product_id')
     def _onchange_product_id(self):

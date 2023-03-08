@@ -1,4 +1,4 @@
-from odoo import api, models
+from odoo import api, fields, models, tools
 
 
 class StockLot(models.Model):
@@ -27,6 +27,7 @@ class StockLot(models.Model):
     def name_get(self):
         ctx = self.env.context
         res_old = super(StockLot, self).name_get()
+        print('self', self)
         if ctx.get('product_id'):
             domain = [
                 ('product_id', '=', ctx['product_id']),
@@ -41,9 +42,12 @@ class StockLot(models.Model):
             res = []
             for (key, name) in res_old:
                 if key in map_lote:
-                    res.append((key, '%s (Disp: %s)' % (name, map_lote[key])))
-                else:
-                    res.append((key, name))
+                    expiration_date = self.browse(key).expiration_date
+                    name += ' (Disp: %s)' % map_lote[key]
+                    if expiration_date:
+                        expiration_date = tools.format_datetime(self.env, expiration_date, dt_format='short')
+                        name += ' (Vcto: %s)' % (expiration_date, )
+                res.append((key, name))
             return res
 
         return res_old
