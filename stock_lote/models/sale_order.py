@@ -8,13 +8,8 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     def _get_reward_line_values(self, program):
-        self.ensure_one()
-        self = self.with_context(lang=self.partner_id.lang, program=program)
-        program = program.with_context(lang=self.partner_id.lang)
-        if program.reward_type == 'discount':
-            return self._get_reward_values_discount(program)
-        elif program.reward_type == 'product':
-            return [self._get_reward_values_product(program)]
+        self = self.with_context(program=program)
+        return super(SaleOrder, self)._get_reward_line_values(program)
 
     def _get_paid_order_lines(self):
         program = self.env.context.get('program')
