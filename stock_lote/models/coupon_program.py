@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
+
 from odoo import api, fields, models
 
 
 class CouponProgram(models.Model):
     _inherit = 'coupon.program'
 
-    rule_expiration_date = fields.Boolean('Fecha de expiración')
+    rule_expiration_date = fields.Boolean('Vencimiento de lote')
     rule_expiration_from = fields.Integer('Mes Inicio')
     rule_expiration_to = fields.Integer('Mes Final')
 

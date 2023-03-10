@@ -6,14 +6,14 @@
         <field name="inherit_id" ref="coupon.coupon_program_view_form_common"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='company_id']" position="before">
-                <label for="rule_expiration_date" string="Por vencimiento"/>
+                <label for="rule_expiration_date" string="Por vencimiento de lote"/>
                 <div name="rule_expiration_date" class="o_row">
                     <field name="rule_expiration_date" />
                      <span>Entre: </span>
                     <field name="rule_expiration_from" attrs="{'invisible':[('rule_expiration_date','=',False)], 'required':[('rule_expiration_date','!=',False)]}"/>
-                     <span>meses y: </span>
+                     <span> y: </span>
                     <field name="rule_expiration_to" attrs="{'invisible':[('rule_expiration_date','=',False)], 'required':[('rule_expiration_date','!=',False)]}"/>
-
+                     <span> meses</span>
                 </div>
             </xpath>
         </field>

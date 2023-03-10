@@ -1,4 +1,6 @@
-from odoo import api, fields, models, tools
+# -*- coding: utf-8 -*-
+
+from odoo import api, models, tools
 
 
 class StockLot(models.Model):
@@ -12,7 +14,7 @@ class StockLot(models.Model):
                 ('product_id', '=', ctx['product_id']),
                 ('on_hand', '=', True),
             ]
-            lot_ids = self.env['stock.quant'].search(domain).mapped('lot_id').ids
+            lot_ids = self.env['stock.quant'].search(domain).filtered(lambda quant: quant.available_quantity > 0).mapped('lot_id').ids
             args = [('id', 'in', lot_ids)] + args
         elif ctx.get('origin') and ctx.get('default_product_id'):
             domain = [
@@ -27,7 +29,6 @@ class StockLot(models.Model):
     def name_get(self):
         ctx = self.env.context
         res_old = super(StockLot, self).name_get()
-        print('self', self)
         if ctx.get('product_id'):
             domain = [
                 ('product_id', '=', ctx['product_id']),
