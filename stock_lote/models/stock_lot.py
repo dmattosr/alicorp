@@ -39,16 +39,25 @@ class StockLot(models.Model):
                 stock_quant.lot_id.id: stock_quant.available_quantity
                 for stock_quant in stock_quant_objs
             }
+            k = 9999999999
+            map_lote = {
+                stock_quant.lot_id.id: (
+                    stock_quant.available_quantity,
+                    stock_quant.lot_id.expiration_date,
+                    stock_quant.lot_id.expiration_date and stock_quant.lot_id.expiration_date.timestamp() or k
+                )
+                for stock_quant in stock_quant_objs
+            }
 
             res = []
             for (key, name) in res_old:
                 if key in map_lote:
-                    expiration_date = self.browse(key).expiration_date
-                    name += ' (Disp: %s)' % map_lote[key]
-                    if expiration_date:
-                        expiration_date = tools.format_datetime(self.env, expiration_date, dt_format='short')
-                        name += ' (Vcto: %s)' % (expiration_date, )
+                    name += ' (Disp: %s)' % map_lote[key][0]
+                    if map_lote[key][1]:
+                        text = tools.format_datetime(self.env, map_lote[key][1], dt_format='short')
+                        name += ' (Vcto: %s)' % (text, )
                 res.append((key, name))
-            return res
 
+            res.sort(key=lambda x: map_lote[x[0]][2])
+            return res
         return res_old
